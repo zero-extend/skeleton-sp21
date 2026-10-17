@@ -19,7 +19,7 @@ public class IntListExercises {
     }
 
     /**
-     * Part B: Buggy method that sets node.first to zero if
+     * Part B: Buggy method that sets node. first to zero if
      * the max value in the list starting at node has the same
      * first and last digit, for every node in L
      *
@@ -79,7 +79,7 @@ public class IntListExercises {
             lst.first *= lst.first;
         }
 
-        /* if currElemIsPrime is true , function will return ,do not recusion */
+        /* if currElemIsPrime is true , function will return ,do not recursion */
         return currElemIsPrime | squarePrimes(lst.rest);
     }
 }
