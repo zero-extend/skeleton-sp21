@@ -150,7 +150,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
         if (index == 0) {
             val = p.val;
         } else {
-            val = getRecusive_true(index--, p.next);
+            val = getRecusive_true(--index, p.next);
         }
         return val;
     }
