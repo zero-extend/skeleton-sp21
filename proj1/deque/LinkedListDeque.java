@@ -7,7 +7,7 @@ import java.util.Iterator;
  * @date 2026/10/30 13:49
  * @description
  */
-public class LinkedListDeque<T> implements Iterable<T>{
+public class LinkedListDeque<T> implements Iterable<T>,Deque<T>{
 
 
     private  static class node<T>{
@@ -41,6 +41,7 @@ public class LinkedListDeque<T> implements Iterable<T>{
         sentinel.head = sentinel;
     }
 
+    @Override
     public void addFirst(T item)
     {
         node<T> new_point = new node<T>(item);
@@ -58,6 +59,7 @@ public class LinkedListDeque<T> implements Iterable<T>{
 
     }
 
+    @Override
     public void addLast(T item){
         node<T> new_point = new node<T>(item);
         if(size == 0)
@@ -73,17 +75,13 @@ public class LinkedListDeque<T> implements Iterable<T>{
         size++;
     }
 
-    public boolean isEmpty(){
-        if (size == 0)
-            return true;
-        else
-            return false;
-    }
 
+    @Override
     public int size(){
         return size;
     }
 
+    @Override
     public void printDeque(){
         for (int i = 0; i < size; i++){
             System.out.print(get(i)+" ");
@@ -91,6 +89,7 @@ public class LinkedListDeque<T> implements Iterable<T>{
         System.out.println("");
     }
 
+    @Override
     public T removeFirst(){
         if(size == 0)
             return null;
@@ -111,6 +110,7 @@ public class LinkedListDeque<T> implements Iterable<T>{
         return val;
     }
 
+    @Override
     public T removeLast(){
         if(size == 0)
             return null;
@@ -131,6 +131,7 @@ public class LinkedListDeque<T> implements Iterable<T>{
         return val;
     }
 
+    @Override
     public T get(int index){
         node<T> p = sentinel.next;
 

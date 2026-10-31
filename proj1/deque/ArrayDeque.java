@@ -1,6 +1,5 @@
 package deque;
 
-import java.util.IllegalFormatCodePointException;
 import java.util.Iterator;
 
 /**
@@ -8,7 +7,7 @@ import java.util.Iterator;
  * @date 2026/10/30 15:45
  * @description
  */
-public class ArrayDeque<T> implements Iterable<T>{
+public class ArrayDeque<T> implements Iterable<T>,Deque<T>{
     private T[] array_pointer;
     private int size;
     private int firstindex;
@@ -16,25 +15,26 @@ public class ArrayDeque<T> implements Iterable<T>{
 
     public ArrayDeque(){
         array_pointer = (T[]) new Object[8];
-        size = 0;
+        size = 0;   // actually element size
         firstindex = array_pointer.length - 1;
         lastindex = 0;
     }
 
-    private void resize(int resize){
-        T[] pointer = (T[]) new Object[resize];
-        for (int i = 0; i < array_pointer.length; i++)
+    private void resize(int capacity){
+        T[] pointer = (T[]) new Object[capacity];
+        for (int i = 0; i < size; i++)
         {
             pointer[i] = get(i);
         }
 
-        array_pointer = pointer;
         /** new index */
-        firstindex = (resize - 1 + resize) % resize;
-        lastindex = (array_pointer.length) % resize;
+        firstindex = (capacity - 1 + capacity) % capacity;
+        lastindex = (size) % capacity;
 
+        array_pointer = pointer;
     }
 
+    @Override
     public void addFirst(T item){
         if (size == array_pointer.length){
             resize(2*array_pointer.length);
@@ -44,6 +44,7 @@ public class ArrayDeque<T> implements Iterable<T>{
         size++;
     }
 
+    @Override
     public void addLast(T items){
         if (size == array_pointer.length){
             resize(2*array_pointer.length);
@@ -53,23 +54,23 @@ public class ArrayDeque<T> implements Iterable<T>{
         size++;
     }
 
-    public boolean isEmpty(){
-        if (size == 0){
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
 
+    @Override
     public int size(){
         return size;
     }
 
+    @Override
     public void printDeque(){
+    for (int i = 0; i < size; i++)
+    {
+        System.out.print(get(i)+" ");
+    }
+    System.out.println("");
 
     }
 
+    @Override
     public T removeFirst(){
         if (size == 0)
             return null;
@@ -85,6 +86,7 @@ public class ArrayDeque<T> implements Iterable<T>{
         return val;
     }
 
+    @Override
     public T removeLast(){
         if (size == 0)
             return null;
@@ -100,6 +102,7 @@ public class ArrayDeque<T> implements Iterable<T>{
         return val;
     }
 
+    @Override
     public T get(int index){
         if ((index > size-1)||(index < 0))
             return null;
