@@ -129,11 +129,19 @@ public class LinkedListDequeTest {
     @Test
     public void equalsTest(){
         LinkedListDeque<String> a = new LinkedListDeque<String>();
-        LinkedListDeque<String> b = new LinkedListDeque<String>();
+        ArrayDeque<String> b = new ArrayDeque<String>();
         a.addFirst("hello");
         a.addFirst("world");
         b.addFirst("hello");
         b.addFirst("world");
+        assertEquals(true,a.equals(b));
+    }
+
+    @Test
+    public void equalsNullTest(){
+        LinkedListDeque<Integer> a = new LinkedListDeque<Integer>();
+        ArrayDeque<Integer> b = new ArrayDeque<Integer>();
+
         assertEquals(true,a.equals(b));
     }
 }

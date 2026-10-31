@@ -7,23 +7,22 @@ import java.util.Iterator;
  * @date 2026/10/30 15:45
  * @description
  */
-public class ArrayDeque<T> implements Iterable<T>,Deque<T>{
-    private T[] array_pointer;
+public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
+    private T[] arrayPointer;
     private int size;
     private int firstindex;
     private int lastindex;
 
-    public ArrayDeque(){
-        array_pointer = (T[]) new Object[8];
-        size = 0;   // actually element size
-        firstindex = array_pointer.length - 1;
+    public ArrayDeque() {
+        arrayPointer = (T[]) new Object[8];
+        size = 0;
+        firstindex = arrayPointer.length - 1;
         lastindex = 0;
     }
 
-    private void resize(int capacity){
+    private void resize(int capacity) {
         T[] pointer = (T[]) new Object[capacity];
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             pointer[i] = get(i);
         }
 
@@ -31,132 +30,134 @@ public class ArrayDeque<T> implements Iterable<T>,Deque<T>{
         firstindex = (capacity - 1 + capacity) % capacity;
         lastindex = (size) % capacity;
 
-        array_pointer = pointer;
+        arrayPointer = pointer;
     }
 
     @Override
-    public void addFirst(T item){
-        if (size == array_pointer.length){
-            resize(2*array_pointer.length);
+    public void addFirst(T item) {
+        if (size == arrayPointer.length) {
+            resize(2 * arrayPointer.length);
         }
-        array_pointer[firstindex] = item;
-        firstindex = (firstindex-1+array_pointer.length) % array_pointer.length;
+        arrayPointer[firstindex] = item;
+        firstindex = (firstindex - 1 + arrayPointer.length) % arrayPointer.length;
         size++;
     }
 
     @Override
-    public void addLast(T items){
-        if (size == array_pointer.length){
-            resize(2*array_pointer.length);
+    public void addLast(T items) {
+        if (size == arrayPointer.length) {
+            resize(2 * arrayPointer.length);
         }
-        array_pointer[lastindex] = items;
-        lastindex = (lastindex+1) % array_pointer.length;
+        arrayPointer[lastindex] = items;
+        lastindex = (lastindex + 1) % arrayPointer.length;
         size++;
     }
 
 
     @Override
-    public int size(){
+    public int size() {
         return size;
     }
 
     @Override
-    public void printDeque(){
-    for (int i = 0; i < size; i++)
-    {
-        System.out.print(get(i)+" ");
-    }
-    System.out.println("");
+    public void printDeque() {
+        for (int i = 0; i < size; i++) {
+            System.out.print(get(i) + " ");
+        }
+        System.out.println("");
 
     }
 
     @Override
-    public T removeFirst(){
-        if (size == 0)
+    public T removeFirst() {
+        if (size == 0) {
             return null;
+        }
 
-        int real_index = (firstindex+1)%array_pointer.length;
-        T val = array_pointer[real_index];
-        array_pointer[real_index] = null;
+        int realIndex = (firstindex + 1) % arrayPointer.length;
+        T val = arrayPointer[realIndex];
+        arrayPointer[realIndex] = null;
         size--;
-        firstindex = real_index;
-        if ((array_pointer.length >= 16)&&(size < (array_pointer.length/4))){
-            resize(array_pointer.length/2);
+        firstindex = realIndex;
+        if ((arrayPointer.length >= 16) && (size < (arrayPointer.length / 4))) {
+            resize(arrayPointer.length / 2);
         }
         return val;
     }
 
     @Override
-    public T removeLast(){
-        if (size == 0)
+    public T removeLast() {
+        if (size == 0) {
             return null;
+        }
 
-        int real_index = (lastindex-1+array_pointer.length) % array_pointer.length;
-        T val = array_pointer[real_index];
-        array_pointer[real_index] = null;
+        int realIndex = (lastindex - 1 + arrayPointer.length) % arrayPointer.length;
+        T val = arrayPointer[realIndex];
+        arrayPointer[realIndex] = null;
         size--;
-        lastindex = real_index;
-        if ((array_pointer.length >= 16)&&(size < (array_pointer.length/4))){
-            resize(array_pointer.length/2);
+        lastindex = realIndex;
+        if ((arrayPointer.length >= 16) && (size < (arrayPointer.length / 4))) {
+            resize(arrayPointer.length / 2);
         }
         return val;
     }
 
     @Override
-    public T get(int index){
-        if ((index > size-1)||(index < 0))
+    public T get(int index) {
+        if ((index > size - 1) || (index < 0)) {
             return null;
+        }
 
-        int base_index = (firstindex + 1) % array_pointer.length;
-        return array_pointer[(base_index+index) % array_pointer.length];
+        int baseIndex = (firstindex + 1) % arrayPointer.length;
+        return arrayPointer[(baseIndex + index) % arrayPointer.length];
 
     }
 
-    private class ArrayDequeIterator implements Iterator<T>{
-        private int wiz_pos;
-        public ArrayDequeIterator(){
-            wiz_pos = 0;
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int wizPos;
+        private ArrayDequeIterator() {
+            wizPos = 0;
         }
 
         @Override
-        public boolean hasNext(){
-            return wiz_pos < size;
+        public boolean hasNext() {
+            return wizPos < size;
         }
 
         @Override
-        public T next(){
-            T val = get(wiz_pos);
-            wiz_pos++;
+        public T next() {
+            T val = get(wizPos);
+            wizPos++;
             return val;
         }
 
     }
 
     @Override
-    public  Iterator<T> iterator(){
+    public  Iterator<T> iterator() {
         return new ArrayDequeIterator();
     }
 
 
     @Override
-    public boolean equals(Object o){
-        if (o instanceof ArrayDeque )
-        {
-            ArrayDeque<T> Other = (ArrayDeque<T>) o;
-            if (Other.size() != this.size())
+    public boolean equals(Object o) {
+        if (o instanceof Deque) {
+            Deque<?> other = (Deque<?>) o;
+            if (other.size() != this.size()) {
                 return false;
-            else {
+            } else {
                 int index = 0;
-                for (T i : this)
-                {
-                if(i.equals(Other.get(index)) == false)
-                { return false;}
+                for (T i : this) {
+                    if (i.equals(other.get(index)) == false) {
+                        return false;
+                    }
                     index++;
                 }
                 return true;
             }
+        } else {
+            return false;
         }
-        else {return false;}
 
     }
 
