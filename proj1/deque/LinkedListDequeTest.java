@@ -144,4 +144,14 @@ public class LinkedListDequeTest {
 
         assertEquals(true,a.equals(b));
     }
+
+    @Test
+    public void getRecursiveTest(){
+        LinkedListDeque<String> a = new LinkedListDeque<String>();
+        a.addFirst("hello");
+        a.addFirst("world");
+        assertEquals("hello",a.getRecursive(1));
+        assertEquals(null,a.getRecursive(2));
+    }
+
 }
