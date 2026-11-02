@@ -144,6 +144,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
         switch (directionFlag) {
         case 0 :
+            /** if root is null, must use root instead of find,
+             * because null is value, pass by value instead of address*/
             root = node;
             break;
 
@@ -159,6 +161,21 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
         size++;
 
+    }
+
+    public void printInOrder() {
+        printRecurive(root);
+
+    }
+
+    private void printRecurive(BSTNode node) {
+        if (node == null) {
+            return ;
+        } else {
+            printRecurive(node.left);
+            System.out.println((node.value));
+            printRecurive(node.right);
+        }
     }
 
     /* Returns a Set view of the keys contained in this map. Not required for Lab 7.
