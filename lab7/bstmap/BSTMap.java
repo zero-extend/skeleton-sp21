@@ -16,7 +16,7 @@ import java.util.Set;
 public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     private int size;
     private BSTNode root;
-    Set<K> keySet;
+    private Set<K> keySet;
 
     private class BSTNode {
         private K key;
