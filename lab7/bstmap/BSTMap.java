@@ -2,6 +2,8 @@ package bstmap;
 
 
 
+import edu.princeton.cs.algs4.BST;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -67,17 +69,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     public void clear() {
         root = null;
         size = 0;
+        keySet = new HashSet<>();
     }
 
     /* Returns true if this map contains a mapping for the specified key. */
     @Override
     public boolean containsKey(K key) {
-        BSTNode node = findKey(key);
-        if (node == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return keySet.contains(key);
     }
 
     /* Returns the value to which the specified key is mapped, or null if this
@@ -101,6 +99,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     /**
      * find the BSTNode of the key
+     * if don't have the key, return null
      * @param key
      * @return BSTNode or null
      */
@@ -117,6 +116,28 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             }
         }
         return null;
+
+    }
+
+    /**
+     * return the parent Node of the key Node
+     * if the key is root.key, return null;
+     * @param key
+     * @return BSTNode or null
+     */
+    private BSTNode findKeyParent(K key) {
+        BSTNode findParent = null;
+        BSTNode findPrivate = root;
+        /** find the correct location and put the node */
+        while (findPrivate.key.equals(key) == false) {
+            findParent = findPrivate;
+            if (key.compareTo(findPrivate.key) > 0) {
+                findPrivate = findPrivate.right;
+            } else if (key.compareTo(findPrivate.key) < 0) {
+                findPrivate = findPrivate.left;
+            }
+        }
+        return findParent;
 
     }
 
@@ -190,13 +211,110 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return keySet;
     }
 
+    /**
+     * call after making sure the node isn't null
+     * find the max KeyNode in the left of tree from node
+     * if the left of tree is null, return null
+     * @return BSTNode
+     */
+    private BSTNode findMaxInleft(BSTNode node) {
+        if (node == null) {
+            return null;
+        }
+
+        BSTNode find = node.left;
+        BSTNode findPrivate = node.left;
+
+        while (findPrivate != null) {
+            find = findPrivate;
+            findPrivate = findPrivate.right;
+        }
+        return find;
+    }
+
+    private BSTNode findMinInright(BSTNode node) {
+        if (node == null) {
+            return null;
+        }
+
+        BSTNode find = node.right;
+        BSTNode findPrivate = node.right;
+
+        while (findPrivate != null) {
+            find = findPrivate;
+            findPrivate = findPrivate.left;
+        }
+        return find;
+    }
+
+    private V deleteNode(BSTNode delBstNode) {
+        V value = delBstNode.value;
+        K key = delBstNode.key;
+        BSTNode maxInLeft = findMaxInleft(delBstNode);
+
+        /** just only has right child */
+        if (maxInLeft == null) {
+            BSTNode minInRight = findMinInright(delBstNode);
+
+            /** non-child Node*/
+            if (minInRight == null) {
+                BSTNode NonSonFather = findKeyParent(delBstNode.key);
+
+                /** only has root */
+                if (NonSonFather == null) {
+                    clear();
+                    return value;
+                }
+
+                if (delBstNode.key.compareTo(NonSonFather.key) > 0) {
+                    NonSonFather.right = null;
+                } else {
+                    NonSonFather.left = null;
+                }
+                size--;
+                keySet.remove(key);
+                return value;
+            }
+
+            BSTNode minInRightParent = findKeyParent(minInRight.key);
+            delBstNode.key = minInRight.key;
+            delBstNode.value = minInRight.value;
+            if (minInRightParent == delBstNode) {
+                minInRightParent.right = delBstNode.right;
+            } else {
+                minInRightParent.left = delBstNode.right;
+            }size--;
+            keySet.remove(key);
+            return value;
+        }
+
+        /** has left child situation */
+        BSTNode maxInLeftParent = findKeyParent(maxInLeft.key);
+        delBstNode.key = maxInLeft.key;
+        delBstNode.value = maxInLeft.value;
+        if (maxInLeftParent == delBstNode) {
+            maxInLeftParent.left = delBstNode.left;
+        } else {
+            maxInLeftParent.right = delBstNode.left;
+        }
+        size--;
+        keySet.remove(key);
+        return value;
+    }
 
     /* Removes the mapping for the specified key from this map if present.
      * Not required for Lab 7. If you don't implement this, throw an
      * UnsupportedOperationException. */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        BSTNode delBstNode = findKey(key);
+
+        /** If don't have this key, return null; */
+        if (delBstNode == null) {
+            return null;
+        }
+
+            return deleteNode(delBstNode);
     }
 
     /* Removes the entry for the specified key only if it is currently mapped to
@@ -204,6 +322,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      * throw an UnsupportedOperationException.*/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+       if (get(key) != value) {
+           return null;
+       }
+       return remove(key);
     }
 }
