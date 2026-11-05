@@ -2,6 +2,7 @@ package bstmap;
 
 
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     private int size;
     private BSTNode root;
+    Set<K> keySet;
 
     private class BSTNode {
         private K key;
@@ -28,34 +30,35 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
     }
 
-    /**
-    private class BSTIterator<V> implements Iterator<V> {
-        private int wizPos;
+
+    private class BSTIterator implements Iterator<K> {
+        private Iterator<K> keyIterator;
         BSTIterator(){
-            wizPos = 0;
+           keyIterator = keySet.iterator();
         }
 
         @Override
         public boolean hasNext(){
-            return wizPos < size();
+            return keyIterator.hasNext();
         }
 
         @Override
-        public V next(){
-            return null;
+        public K next(){
+            return keyIterator.next();
         }
     }
-    */
+
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return new BSTIterator();
     }
 
 
     public BSTMap() {
         root = null;
         size = 0;
+        keySet = new HashSet<K>();
     }
 
 
@@ -159,6 +162,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
         }
 
+        keySet.add(node.key);
+
         size++;
 
     }
@@ -182,7 +187,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      * If you don't implement this, throw an UnsupportedOperationException. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        return keySet;
     }
 
 
