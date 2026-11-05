@@ -183,7 +183,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
         if (containsKey(key)) {
             for (Node i : buckets[bucketsNumber]) {
-                   i.value = value;
+                if (i.key.equals(key)) {
+                    i.value = value;
+                }
                 }
             return;
             }
